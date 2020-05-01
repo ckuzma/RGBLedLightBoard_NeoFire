@@ -1,48 +1,47 @@
-#include <Adafruit_GFX.h>
-#include <Adafruit_NeoPixel.h>
+// Based off of code originall written by @mic159 in their NeoFire
+// project: https://github.com/mic159/NeoFire
+
+// Modified by @ckuzma in order to be compatible with the
+// rgb-led-light-board project: https://github.com/ckuzma/rgb-led-light-board
+
 #include <Adafruit_NeoMatrix.h>
 
-#define PIN 2
-#define MATRIX_HEIGHT 8
+#define PIN D3
 #define MATRIX_WIDTH 16
+#define MATRIX_HEIGHT 8
 
+// Initialize the matrix
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(
   MATRIX_WIDTH, MATRIX_HEIGHT,
   PIN,
-  NEO_MATRIX_TOP + NEO_MATRIX_LEFT + NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
-  NEO_GRB + NEO_KHZ800
-);
-
-// IMPORTANT: To reduce NeoPixel burnout risk, add 1000 uF capacitor across
-// pixel power leads, add 300 - 500 Ohm resistor on first pixel's data input
-// and minimize distance between Arduino and first pixel.  Avoid connecting
-// on a live circuit...if you must, connect GND first.
-
-
+  NEO_MATRIX_TOP    + NEO_MATRIX_LEFT +
+  NEO_MATRIX_ROWS   + NEO_MATRIX_ZIGZAG,
+  NEO_GRB           + NEO_KHZ800
+  );
 
 //these values are substracetd from the generated values to give a shape to the animation
 const unsigned char valueMask[MATRIX_HEIGHT][MATRIX_WIDTH]={
-    {32 , 0  , 0  , 0  , 0  , 0  , 0  , 32 , 32 , 0  , 0  , 0  , 0  , 0  , 0  , 32 },
-    {64 , 0  , 0  , 0  , 0  , 0  , 0  , 64 , 64 , 0  , 0  , 0  , 0  , 0  , 0  , 64 },
-    {96 , 32 , 0  , 0  , 0  , 0  , 32 , 96 , 96 , 32 , 0  , 0  , 0  , 0  , 32 , 96 },
-    {128, 64 , 32 , 0  , 0  , 32 , 64 , 128, 128, 64 , 32 , 0  , 0  , 32 , 64 , 128},
-    {160, 96 , 64 , 32 , 32 , 64 , 96 , 160, 160, 96 , 64 , 32 , 32 , 64 , 96 , 160},
-    {192, 128, 96 , 64 , 64 , 96 , 128, 192, 192, 128, 96 , 64 , 64 , 96 , 128, 192},
-    {255, 160, 128, 96 , 96 , 128, 160, 255, 255, 160, 128, 96 , 96 , 128, 160, 255},
-    {255, 192, 160, 128, 128, 160, 192, 255, 255, 192, 160, 128, 128, 160, 192, 255}
+    {32 , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 32 },
+    {64 , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 64 },
+    {96 , 32 , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 0  , 32 , 96 },
+    {128, 64 , 32 , 0  , 0  , 16 , 0  , 0  , 0  , 0 , 32 , 0  , 0  , 32 , 64 , 128},
+    {160, 96 , 64 , 32 , 32 , 64 , 16 , 32 , 32 , 16 , 64 , 32 , 32 , 64 , 96 , 160},
+    {192, 128, 96 , 64 , 64 , 96 , 96 , 64 , 64 , 96, 96 , 64 , 64 , 96 , 128, 192},
+    {255, 160, 128, 96 , 96 , 128, 160, 96 , 96 , 160, 128, 96 , 96 , 128, 160, 255},
+    {255, 192, 160, 128, 128, 160, 192, 128, 128, 192, 160, 128, 128, 160, 192, 255}
 };
 
 //these are the hues for the fire, 
 //should be between 0 (red) to about 25 (yellow)
 const unsigned char hueMask[MATRIX_HEIGHT][MATRIX_WIDTH]={
-    {1 , 11, 19, 25, 25, 22, 11, 1 , 1 , 11, 19, 25, 25, 22, 11, 1 },
-    {1 , 8 , 13, 19, 25, 19, 8 , 1 , 1 , 8 , 13, 19, 25, 19, 8 , 1 },
-    {1 , 8 , 13, 16, 19, 16, 8 , 1 , 1 , 8 , 13, 16, 19, 16, 8 , 1 },
-    {1 , 5 , 11, 13, 13, 13, 5 , 1 , 1 , 5 , 11, 13, 13, 13, 5 , 1 },
-    {1 , 5 , 11, 11, 11, 11, 5 , 1 , 1 , 5 , 11, 11, 11, 11, 5 , 1 },
-    {0 , 1 , 5 , 8 , 8 , 5 , 1 , 0 , 0 , 1 , 5 , 8 , 8 , 5 , 1 , 0 },
-    {0 , 0 , 1 , 5 , 5 , 1 , 0 , 0 , 0 , 0 , 1 , 5 , 5 , 1 , 0 , 0 },
-    {0 , 0 , 0 , 1 , 1 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 0 , 0 , 0 }
+    {1 , 11, 19, 25, 25, 22, 24, 25, 25, 25, 19, 25, 25, 22, 11, 1 },
+    {1 , 8 , 13, 19, 25, 19, 15, 20, 20, 10, 15, 19, 25, 19, 8 , 1 },
+    {1 , 8 , 13, 16, 19, 16, 12, 17, 17, 12, 13, 16, 19, 16, 8 , 1 },
+    {1 , 5 , 11, 13, 13, 13, 10, 15, 15, 10, 11, 13, 13, 13, 5 , 1 },
+    {1 , 5 , 11, 11, 11, 11, 5 , 13, 13, 5 , 11, 11, 11, 11, 5 , 1 },
+    {0 , 1 , 5 , 8 , 8 , 5 , 5 , 8 , 8 , 5 , 5 , 8 , 8 , 5 , 1 , 0 },
+    {0 , 0 , 1 , 5 , 5 , 1 , 1 , 5 , 5 , 1 , 1 , 5 , 5 , 1 , 0 , 0 },
+    {0 , 0 , 0 , 1 , 1 , 0 , 0 , 1 , 1 , 0 , 0 , 1 , 1 , 0 , 0 , 0 }
 };
 
 unsigned char matrixValue[MATRIX_HEIGHT][MATRIX_WIDTH];
@@ -165,5 +164,6 @@ void loop() {
   }
   drawFrame(pcnt);
   matrix.show();
+  delay(40);
   pcnt+=30;
 }
