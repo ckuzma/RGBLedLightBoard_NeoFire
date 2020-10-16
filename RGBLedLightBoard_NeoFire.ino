@@ -1,4 +1,4 @@
-// Based off of code originall written by @mic159 in their NeoFire
+// Based off of code originally written by @mic159 in their NeoFire
 // project: https://github.com/mic159/NeoFire
 
 // Modified by @ckuzma in order to be compatible with the
