@@ -14,7 +14,7 @@
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(
   MATRIX_WIDTH, MATRIX_HEIGHT,
   PIN,
-  NEO_MATRIX_TOP    + NEO_MATRIX_LEFT +
+  NEO_MATRIX_BOTTOM + NEO_MATRIX_LEFT +
   NEO_MATRIX_ROWS   + NEO_MATRIX_ZIGZAG,
   NEO_GRB           + NEO_KHZ800
   );
