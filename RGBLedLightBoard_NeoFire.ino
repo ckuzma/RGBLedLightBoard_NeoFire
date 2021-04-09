@@ -5,6 +5,7 @@
 // rgb-led-light-board project: https://github.com/ckuzma/rgb-led-light-board
 
 #include <Adafruit_NeoMatrix.h>
+#include <ESP8266WiFi.h>
 
 #define PIN D3
 #define MATRIX_WIDTH 16
@@ -149,6 +150,7 @@ void drawFrame(int pcnt) {
 }
 
 void setup() {
+  WiFi.mode(WIFI_OFF);
   matrix.begin();
   randomSeed(analogRead(0));
   generateLine();
